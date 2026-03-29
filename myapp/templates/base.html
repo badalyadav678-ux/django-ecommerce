@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Store</title>
+</head>
+<body>
+
+<!-- 🔥 NAVBAR -->
+<div style="background:#2874f0; color:white; padding:15px; display:flex; justify-content:space-between; align-items:center;">
+
+    <!-- LEFT: LOGO -->
+    <div>
+        <a href="/" style="color:white; font-size:20px; text-decoration:none;">MyStore</a>
+    </div>
+
+    <!-- 🔍 MIDDLE: SEARCH BAR -->
+    <div>
+        <form method="GET" action="/" style="display:flex;">
+            <input type="text" name="q" placeholder="Search products"
+                   style="padding:5px; border-radius:5px;">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <!-- RIGHT: MENU -->
+    <div>
+        <a href="{% url 'cart' %}" style="color:white; margin-right:20px;">
+            Cart ({{ cart_count }})
+        </a>
+
+        {% if user.is_authenticated %}
+            <span>Hi, {{ user.username }}</span>
+            <a href="{% url 'my_orders' %}" style="color:white; margin-left:15px;">
+                My Orders
+            </a>
+
+            <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button style="margin-left:10px;">Logout</button>
+            </form>
+        {% else %}
+            <a href="{% url 'login' %}" style="color:white;">Login</a>
+            <a href="{% url 'signup' %}" style="color:white; margin-left:10px;">Signup</a>
+        {% endif %}
+    </div>
+
+</div>
+{% block content %}
+{% endblock %}
+
+</body>
+</html>

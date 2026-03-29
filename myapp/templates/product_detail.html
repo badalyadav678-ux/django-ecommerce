@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div style="display:flex; gap:40px; padding:30px;">
+
+    <!-- LEFT: IMAGE -->
+    <div>
+        {% if product.image %}
+            <img src="{{ product.image.url }}" width="400">
+        {% endif %}
+    </div>
+
+    <!-- RIGHT: DETAILS -->
+    <div>
+        <h1>{{ product.name }}</h1>
+
+        <h2 style="color:green;">₹ {{ product.price }}</h2>
+        <p style="margin-top:10px;">
+            {{ product.description }}
+        </p>
+        
+        <br>
+        
+
+        <br>
+
+        <a href="{% url 'add_to_cart' product.id %}">
+            <button style="padding:10px 20px; background:orange; border:none;">
+                Add to Cart
+            </button>
+        </a>
+    </div>
+
+</div>
+
+{% endblock %}

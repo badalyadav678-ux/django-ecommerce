@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Your Cart</h2>
+
+{% if products %}
+
+    {% for item in products %}
+
+    <div style="border:1px solid black; margin:10px; padding:10px;">
+
+        <h3>{{ item.product.name }}</h3>
+
+        <p>Price: ₹{{ item.product.price }}</p>
+
+        <!-- Quantity Controls -->
+        <p>
+            <a href="{% url 'decrease' item.product.id %}">
+                <button>-</button>
+            </a>
+
+            Quantity: {{ item.quantity }}
+
+            <a href="{% url 'increase' item.product.id %}">
+                <button>+</button>
+            </a>
+        </p>
+
+        <!-- Image -->
+        {% if item.product.image %}
+            <img src="{{ item.product.image.url }}" width="150">
+        {% endif %}
+
+        <!-- Remove Button -->
+        <br><br>
+        <a href="{% url 'remove' item.product.id %}">
+            <button>Remove</button>
+        </a>
+
+    </div>
+
+    {% endfor %}
+
+    <!-- ✅ Total Price -->
+    <h2>Total: ₹{{ total }}</h2>
+
+    <!-- ✅ Checkout Button (CORRECT PLACE) -->
+    <a href="{% url 'checkout' %}">
+        <button style="padding:10px 20px; background:green; color:white; border:none;">
+            Proceed to Checkout
+        </button>
+    </a>
+
+{% else %}
+
+    <p>Your cart is empty</p>
+
+{% endif %}
+
+{% endblock %}

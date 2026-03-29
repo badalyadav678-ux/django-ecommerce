@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div style="padding:30px; max-width:600px; margin:auto;">
+
+    <h2>Checkout</h2>
+
+    <hr>
+
+    <h3>Order Summary</h3>
+
+    {% for item in products %}
+        <p>{{ item.product.name }} × {{ item.quantity }}</p>
+    {% endfor %}
+
+    <h3 style="color:green;">Total: ₹ {{ total }}</h3>
+
+    <hr>
+
+    <h3>Delivery Address</h3>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <input type="text" name="address" placeholder="Enter full address" 
+               style="width:100%; padding:10px;" required>
+
+        <br><br>
+
+        <button style="background:orange; padding:10px 20px; border:none;">
+            Place Order
+        </button>
+    </form>
+
+</div>
+
+{% endblock %}

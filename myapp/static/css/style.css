@@ -1,0 +1,49 @@
+/* Navnar container */
+.navbar {
+    background-color: black;
+    padding: 15px;
+
+}
+/* Website title */
+.navbar h2 {
+    color: white;
+    display: inline;
+}
+/* Menu list */
+.navbar ul {
+    list-style: none;
+    display: inline;
+    margin-left: 30px;
+}
+/* Links */
+.navbar ul li a {
+    color: white;
+    text-decoration: none;
+}
+/* Have effect */
+.navbar ul li a:hover {
+    color: yellow;
+}
+img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+}
+body {
+    margin: 0;
+    padding: 0;
+}
+.navbar {
+    margin: 0;
+}
+.banner {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+.product {
+    border: 1px solid black;
+    padding: 10px;
+    margin: 10px;
+}
