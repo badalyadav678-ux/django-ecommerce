@@ -20,18 +20,31 @@
 
     <h3>Delivery Address</h3>
 
-    <form method="POST">
-        {% csrf_token %}
+<form method="POST">
+    {% csrf_token %}
 
-        <input type="text" name="address" placeholder="Enter full address" 
-               style="width:100%; padding:10px;" required>
+    <!-- 👤 Name -->
+    <input type="text" name="name" placeholder="Enter your name"
+           style="width:100%; padding:10px;" required>
 
-        <br><br>
+    <br><br>
 
-        <button style="background:orange; padding:10px 20px; border:none;">
-            Place Order
-        </button>
-    </form>
+    <!-- 📱 Phone -->
+    <input type="text" name="phone" placeholder="Enter phone number"
+           style="width:100%; padding:10px;" required>
+
+    <br><br>
+
+    <!-- 📍 Address -->
+    <input type="text" name="address" placeholder="Enter full address" 
+           style="width:100%; padding:10px;" required>
+
+    <br><br>
+
+    <button style="background:orange; padding:10px 20px; border:none;">
+        Place Order
+    </button>
+</form>
 
 </div>
 
