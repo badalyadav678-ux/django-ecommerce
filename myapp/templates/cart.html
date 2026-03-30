@@ -58,7 +58,7 @@
         <h3>Price Details</h3>
         <hr>
 
-        <p>Total Items: {{ cart_items|length }}</p>
+        <p>Total Items: {{ products|length }}</p>
         <h2>Total: ₹ {{ total }}</h2>
 
         <a href="{% url 'checkout' %}">
