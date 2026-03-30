@@ -11,7 +11,20 @@
     <h3>Order Summary</h3>
 
     {% for item in products %}
-        <p>{{ item.product.name }} × {{ item.quantity }}</p>
+    <div style="display:flex; align-items:center; gap:15px; margin-bottom:10px;">
+        <!-- IMAGE -->
+         <img src="{{ item.product.image.url }}" width="70" height="70" style="object-fit:cover;">
+         
+         <!-- DETAILS -->
+          
+         <div>
+            <p>{{ item.product.name }}</p>
+            <p>₹ {{ item.product.price }} × {{ item.quantity }}</p>
+        
+        </div>
+    
+    </div>
+    
     {% endfor %}
 
     <h3 style="color:green;">Total: ₹ {{ total }}</h3>

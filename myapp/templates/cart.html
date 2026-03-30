@@ -2,60 +2,73 @@
 
 {% block content %}
 
-<h2>Your Cart</h2>
+<h2 style="padding:20px;">🛒 Your Cart</h2>
 
-{% if products %}
+<div style="display:flex; gap:30px; padding:20px; flex-wrap:wrap;">
 
-    {% for item in products %}
+    <!-- LEFT: CART ITEMS -->
+    <div style="flex:2;">
 
-    <div style="border:1px solid black; margin:10px; padding:10px;">
+        {% for item in products %}
+        <div style="display:flex; gap:20px; border:1px solid #ddd; padding:15px;
+                    margin-bottom:15px; border-radius:10px; align-items:center;">
 
-        <h3>{{ item.product.name }}</h3>
+            <!-- IMAGE -->
+            <img src="{{ item.product.image.url }}" width="120" height="120" style="object-fit:cover;">
 
-        <p>Price: ₹{{ item.product.price }}</p>
+            <!-- DETAILS -->
+            <div style="flex:1;">
+                <h3>{{ item.product.name }}</h3>
+                <h3>₹ {{ item.product.price }} × {{ item.quantity }}</h3>
 
-        <!-- Quantity Controls -->
-        <p>
-            <a href="{% url 'decrease' item.product.id %}">
-                <button>-</button>
-            </a>
+                <!-- QUANTITY -->
+                <div style="display:flex; align-items:center; gap:10px; margin-top:10px;">
+                    <a href="{% url 'decrease_quantity' item.product.id %}">
+                        <button>-</button>
+                    </a>
 
-            Quantity: {{ item.quantity }}
+                    <span>{{ item.quantity }}</span>
 
-            <a href="{% url 'increase' item.product.id %}">
-                <button>+</button>
-            </a>
-        </p>
+                    <a href="{% url 'increase_quantity' item.product.id %}"></a>
+                        <button>+</button>
+                    </a>
+                </div>
 
-        <!-- Image -->
-        {% if item.product.image %}
-            <img src="{{ item.product.image.url }}" width="150">
-        {% endif %}
+                <!-- REMOVE -->
+                <a href="{% url 'remove_from_cart' item.product.id %}"></a>
+                    <button style="background:red; color:white; margin-top:10px;">
+                        Remove
+                    </button>
+                </a>
+            </div>
 
-        <!-- Remove Button -->
-        <br><br>
-        <a href="{% url 'remove' item.product.id %}">
-            <button>Remove</button>
+            <!-- ITEM TOTAL -->
+            <div>
+                <h3>₹ {{ item.product.price|floatformat:2 }} × {{ item.quantity }}</h3>
+            </div>
+
+        </div>
+        {% endfor %}
+
+    </div>
+
+    <!-- RIGHT: SUMMARY -->
+    <div style="flex:1; border:1px solid #ddd; padding:20px; border-radius:10px; height:fit-content;">
+
+        <h3>Price Details</h3>
+        <hr>
+
+        <p>Total Items: {{ cart_items|length }}</p>
+        <h2>Total: ₹ {{ total }}</h2>
+
+        <a href="{% url 'checkout' %}">
+            <button style="background:green; color:white; width:100%; padding:12px; margin-top:15px;">
+                Proceed to Checkout
+            </button>
         </a>
 
     </div>
 
-    {% endfor %}
-
-    <!-- ✅ Total Price -->
-    <h2>Total: ₹{{ total }}</h2>
-
-    <!-- ✅ Checkout Button (CORRECT PLACE) -->
-    <a href="{% url 'checkout' %}">
-        <button style="padding:10px 20px; background:green; color:white; border:none;">
-            Proceed to Checkout
-        </button>
-    </a>
-
-{% else %}
-
-    <p>Your cart is empty</p>
-
-{% endif %}
+</div>
 
 {% endblock %}

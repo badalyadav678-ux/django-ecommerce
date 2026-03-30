@@ -6,30 +6,38 @@
 
 {% if products|length > 0 %}
 
-<div style="display:flex; flex-wrap:wrap; justify-content:center;">
+<div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:20px; padding:20px;">
 
     {% for product in products %}
+    <div style="border:1px solid #ddd; padding:15px; border-radius:10px; text-align:center;
+                box-shadow:0 2px 8px rgba(0,0,0,0.1);
+                transition:0.3s;"
+         onmouseover="this.style.transform='scale(1.05)'"
+         onmouseout="this.style.transform='scale(1)'">
 
-    <div style="border:1px solid #ddd; margin:15px; padding:15px; width:220px; border-radius:10px; text-align:center; box-shadow:0 2px 5px rgba(0,0,0,0.1);">
+        <!-- Product Image -->
+        <img src="{{ product.image.url }}" width="180" height="180" style="object-fit:cover;">
 
-        {% if product.image %}
-            <img src="{{ product.image.url }}" width="150" style="margin-bottom:10px;">
-        {% endif %}
+        <!-- Name -->
+        <h3 style="margin:10px 0;">{{ product.name }}</h3>
 
-        <a href="{% url 'product_detail' product.id %}" style="text-decoration:none; color:black;">
-            <h3>{{ product.name }}</h3>
-        </a>
+        <!-- Price -->
+        <p style="font-weight:bold; color:#b12704;">₹ {{ product.price }}</p>
 
-        <p style="color:green; font-weight:bold;">₹ {{ product.price }}</p>
+        <!-- Buttons -->
+        <div style="display:flex; justify-content:center; gap:10px; margin-top:10px;">
 
-        <a href="{% url 'add_to_cart' product.id %}">
-            <button style="background:orange; border:none; padding:8px 15px; border-radius:5px;">
-                Add to Cart
-            </button>
-        </a>
+            <a href="{% url 'product_detail' product.id %}">
+                <button style="background:#ffd814;">View</button>
+            </a>
+
+            <a href="{% url 'add_to_cart' product.id %}">
+                <button style="background:#ffa41c;">Add</button>
+            </a>
+
+        </div>
 
     </div>
-
     {% endfor %}
 
 </div>
@@ -40,6 +48,14 @@
     No products found
 </p>
 
+{% endif %}
+
+{% if products %}
+    <!-- your product loop -->
+{% else %}
+    <h2 style="text-align:center; padding:20px;">
+        ❌ No products found
+    </h2>
 {% endif %}
 
 {% endblock %}

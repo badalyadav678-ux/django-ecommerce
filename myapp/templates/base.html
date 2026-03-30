@@ -2,49 +2,90 @@
 <html>
 <head>
     <title>My Store</title>
+
+    <style>
+    img {
+        border-radius: 8px;
+    }
+    h3 {
+        font-size: 16px;
+    }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        input {
+            border: none;
+            padding: 6px;
+            border-radius: 4px;
+        }
+    </style>
 </head>
+
 <body>
 
 <!-- 🔥 NAVBAR -->
-<div style="background:#2874f0; color:white; padding:15px; display:flex; justify-content:space-between; align-items:center;">
+<div style="background:#131921; color:white; padding:15px 30px; display:flex; justify-content:space-between; align-items:center;">
 
     <!-- LEFT: LOGO -->
     <div>
-        <a href="/" style="color:white; font-size:20px; text-decoration:none;">MyStore</a>
+        <a href="/" style="color:white; font-size:22px; font-weight:bold;">
+            MyStore
+        </a>
     </div>
 
-    <!-- 🔍 MIDDLE: SEARCH BAR -->
+    <!-- 🔍 SEARCH BAR -->
     <div>
-        <form method="GET" action="/" style="display:flex;">
-            <input type="text" name="q" placeholder="Search products"
-                   style="padding:5px; border-radius:5px;">
-            <button type="submit">Search</button>
+        <form method="GET" action="/" style="display:flex; gap:5px;">
+            <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search products">
+            <button style="background:#febd69;">Search</button>
         </form>
     </div>
 
     <!-- RIGHT: MENU -->
-    <div>
-        <a href="{% url 'cart' %}" style="color:white; margin-right:20px;">
-            Cart ({{ cart_count }})
+    <div style="display:flex; align-items:center; gap:15px;">
+
+        <a href="{% url 'cart' %}" style="color:white;">
+            🛒 Cart ({{ cart_count }})
         </a>
 
         {% if user.is_authenticated %}
             <span>Hi, {{ user.username }}</span>
-            <a href="{% url 'my_orders' %}" style="color:white; margin-left:15px;">
-                My Orders
+
+            <a href="{% url 'my_orders' %}" style="color:white;">
+                Orders
             </a>
 
             <form action="{% url 'logout' %}" method="post" style="display:inline;">
                 {% csrf_token %}
-                <button style="margin-left:10px;">Logout</button>
+                <button style="background:#f08804;">Logout</button>
             </form>
+
         {% else %}
             <a href="{% url 'login' %}" style="color:white;">Login</a>
-            <a href="{% url 'signup' %}" style="color:white; margin-left:10px;">Signup</a>
+            <a href="{% url 'signup' %}" style="color:white;">Signup</a>
         {% endif %}
+
     </div>
 
 </div>
+
 {% block content %}
 {% endblock %}
 

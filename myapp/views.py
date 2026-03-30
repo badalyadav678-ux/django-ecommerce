@@ -7,11 +7,16 @@ from django.contrib.auth.forms import UserCreationForm
 
 
 # 🏠 Home Page
+from django.db.models import Q
+
 def home(request):
     query = request.GET.get('q')
 
     if query:
-        products = Product.objects.filter(name__icontains=query)
+        products = Product.objects.filter(
+            Q(name__icontains=query) |
+            Q(description__icontains=query)
+        )
     else:
         products = Product.objects.all()
 
@@ -157,8 +162,9 @@ def checkout(request):
 
         products.append({
             'product': product,
-            'quantity': qty
-        })
+            'quantity': qty,
+            'id': id
+            })
 
     if request.method == 'POST':
         address = request.POST['address']
