@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Product
+from django.contrib import messages
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
@@ -38,21 +39,25 @@ def product_detail(request, id):
 # 🛒 Add to Cart
 @login_required
 def add_to_cart(request, id):
-    cart = request.session.get('cart', {})
+    if request.method == 'POST':   # ✅ IMPORTANT
 
-    if isinstance(cart, list):
-        cart = {}
+        cart = request.session.get('cart', {})
 
-    id = str(id)
+        if isinstance(cart, list):
+            cart = {}
 
-    if id in cart:
-        cart[id] += 1
-    else:
-        cart[id] = 1
+        id = str(id)
 
-    request.session['cart'] = cart
+        if id in cart:
+            cart[id] += 1
+        else:
+            cart[id] = 1
+
+        request.session['cart'] = cart
+
+        messages.success(request, "Item added to cart successfully!")
+
     return redirect('home')
-
 
 # 🛍 Cart Page
 @login_required
@@ -157,7 +162,7 @@ def checkout(request):
     total = 0
 
     for id, qty in cart.items():
-        product = Product.objects.get(id=id)
+        product = get_object_or_404(Product, id=id)
         total += product.price * qty
 
         products.append({
@@ -189,7 +194,7 @@ def checkout(request):
         # Clear cart
         request.session['cart'] = {}
 
-        return render(request, 'order_success.html')
+        return redirect('order_success')
 
     return render(request, 'checkout.html', {
         'products': products,
@@ -204,3 +209,6 @@ def my_orders(request):
     return render(request, 'my_orders.html', {
         'orders': orders
     })
+
+def order_success(request):
+    return render(request, 'order_success.html')

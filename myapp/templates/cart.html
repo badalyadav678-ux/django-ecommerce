@@ -4,6 +4,8 @@
 
 <h2 style="padding:20px;">🛒 Your Cart</h2>
 
+{% if products|length > 0 %}
+
 <div style="display:flex; gap:30px; padding:20px; flex-wrap:wrap;">
 
     <!-- LEFT: CART ITEMS -->
@@ -11,31 +13,35 @@
 
         {% for item in products %}
         <div style="display:flex; gap:20px; border:1px solid #ddd; padding:15px;
-                    margin-bottom:15px; border-radius:10px; align-items:center;">
+                    margin-bottom:15px; border-radius:10px; align-items:center;
+                    background:white; box-shadow:0 2px 6px rgba(0,0,0,0.05);">
 
             <!-- IMAGE -->
-            <img src="{{ item.product.image.url }}" width="120" height="120" style="object-fit:cover;">
+            <img src="{{ item.product.image.url }}" width="120" height="120"
+                 style="object-fit:cover; border-radius:8px;">
 
             <!-- DETAILS -->
             <div style="flex:1;">
                 <h3>{{ item.product.name }}</h3>
-                <h3>₹ {{ item.product.price }} × {{ item.quantity }}</h3>
+                <p style="font-weight:bold;">₹ {{ item.product.price }} × {{ item.quantity }}</p>
 
                 <!-- QUANTITY -->
                 <div style="display:flex; align-items:center; gap:10px; margin-top:10px;">
+                    
                     <a href="{% url 'decrease_quantity' item.product.id %}">
-                        <button>-</button>
+                        <button style="background:#ddd;">-</button>
                     </a>
 
-                    <span>{{ item.quantity }}</span>
+                    <span style="font-weight:bold;">{{ item.quantity }}</span>
 
-                    <a href="{% url 'increase_quantity' item.product.id %}"></a>
-                        <button>+</button>
+                    <a href="{% url 'increase_quantity' item.product.id %}">
+                        <button style="background:#ddd;">+</button>
                     </a>
+
                 </div>
 
                 <!-- REMOVE -->
-                <a href="{% url 'remove_from_cart' item.product.id %}"></a>
+                <a href="{% url 'remove_from_cart' item.product.id %}">
                     <button style="background:red; color:white; margin-top:10px;">
                         Remove
                     </button>
@@ -53,13 +59,15 @@
     </div>
 
     <!-- RIGHT: SUMMARY -->
-    <div style="flex:1; border:1px solid #ddd; padding:20px; border-radius:10px; height:fit-content;">
+    <div style="flex:1; border:1px solid #ddd; padding:20px;
+                border-radius:10px; height:fit-content;
+                background:white; box-shadow:0 2px 6px rgba(0,0,0,0.05);">
 
         <h3>Price Details</h3>
         <hr>
 
         <p>Total Items: {{ products|length }}</p>
-        <h2>Total: ₹ {{ total }}</h2>
+        <h2 style="color:#b12704;">Total: ₹ {{ total }}</h2>
 
         <a href="{% url 'checkout' %}">
             <button style="background:green; color:white; width:100%; padding:12px; margin-top:15px;">
@@ -70,5 +78,20 @@
     </div>
 
 </div>
+
+{% else %}
+
+<!-- EMPTY CART UI -->
+<div style="text-align:center; margin-top:60px;">
+    <h2 style="color:gray;">🛒 Your cart is empty</h2>
+
+    <a href="/">
+        <button style="margin-top:20px; padding:12px 25px; background:#ffa41c; border:none;">
+            Shop Now
+        </button>
+    </a>
+</div>
+
+{% endif %}
 
 {% endblock %}

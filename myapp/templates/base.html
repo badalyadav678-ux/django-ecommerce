@@ -13,6 +13,7 @@
         body {
             margin: 0;
             font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
         }
 
         a {
@@ -31,9 +32,22 @@
         }
 
         input {
-            border: none;
-            padding: 6px;
+            border: 1px solid #ccc;
+            padding: 8px;
             border-radius: 4px;
+            width: 100%;
+        }
+        textarea {
+            border: 1px solid #ccc;
+            padding: 8px;
+            border-radius: 4px;
+            width: 100%;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border: 1px solid #f08804;
+        
         }
     </style>
 </head>
@@ -41,27 +55,34 @@
 <body>
 
 <!-- 🔥 NAVBAR -->
-<div style="background:#131921; color:white; padding:15px 30px; display:flex; justify-content:space-between; align-items:center;">
+<!-- 🔥 NAVBAR -->
+<div style="background:#131921; color:white; padding:15px 30px; display:flex; align-items:center;">
 
-    <!-- LEFT: LOGO -->
-    <div>
+    <!-- LEFT -->
+    <div style="flex:1;">
         <a href="/" style="color:white; font-size:22px; font-weight:bold;">
             MyStore
         </a>
     </div>
 
-    <!-- 🔍 SEARCH BAR -->
-    <div>
-        <form method="GET" action="/" style="display:flex; gap:5px;">
-            <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search products">
-            <button style="background:#febd69;">Search</button>
+    <!-- CENTER (SEARCH) -->
+    <div style="flex:1; display:flex; justify-content:center;">
+        <form method="GET" action="/" style="display:flex; width:70%; max-width:500px;">
+            
+            <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search products"
+                   style="flex:1; padding:8px; border-radius:4px 0 0 4px;">
+            
+            <button style="background:#febd69; padding:8px 12px; border-radius:0 4px 4px 0;">
+                Search
+            </button>
+
         </form>
     </div>
 
-    <!-- RIGHT: MENU -->
-    <div style="display:flex; align-items:center; gap:15px;">
+    <!-- RIGHT -->
+    <div style="flex:1; display:flex; justify-content:flex-end; align-items:center; gap:15px;">
 
-        <a href="{% url 'cart' %}" style="color:white;">
+        <a href="{% url 'cart' %}" style="color:white; font-weight:bold;">
             🛒 Cart ({{ cart_count }})
         </a>
 
@@ -72,7 +93,7 @@
                 Orders
             </a>
 
-            <form action="{% url 'logout' %}" method="post" style="display:inline;">
+            <form action="{% url 'logout' %}" method="post">
                 {% csrf_token %}
                 <button style="background:#f08804;">Logout</button>
             </form>
@@ -85,9 +106,29 @@
     </div>
 
 </div>
+<div style="padding:20px;">
 
-{% block content %}
-{% endblock %}
+    {% if messages %}
+    {% for message in messages %}
+        <div data-message
+             style="background:#d4edda; color:#155724;
+                    padding:10px 15px; margin-bottom:10px;
+                    border-radius:5px;">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+    {% block content %}
+    {% endblock %}
+</div>
 
+<script>
+    setTimeout(function(){
+        let messages = document.querySelectorAll('[data-message]');
+        messages.forEach(msg => {
+            msg.style.display = 'none';
+        });
+    }, 4000);
+</script>
 </body>
 </html>
