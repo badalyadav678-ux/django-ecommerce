@@ -5,10 +5,13 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
+from .models import Wishlist
 
 
 # 🏠 Home Page
 from django.db.models import Q
+
+from .models import Wishlist
 
 def home(request):
     query = request.GET.get('q')
@@ -24,16 +27,18 @@ def home(request):
     cart = request.session.get('cart', {})
     cart_count = len(cart)
 
+    wishlist_count = 0
+    if request.user.is_authenticated:
+        wishlist_count = Wishlist.objects.filter(user=request.user).count()
+
     return render(request, 'home.html', {
         'products': products,
-        'cart_count': cart_count
+        'cart_count': cart_count,
+        'wishlist_count': wishlist_count
     })
 # 📦 Product Detail Page
 from django.shortcuts import get_object_or_404
 
-def product_detail(request, id):
-    product = get_object_or_404(Product, id=id)
-    return render(request, 'product_detail.html', {'product': product})
 
 
 # 🛒 Add to Cart
@@ -172,14 +177,18 @@ def checkout(request):
             })
 
     if request.method == 'POST':
+        name = request.POST['name']
+        phone = request.POST['phone']
         address = request.POST['address']
-
-        # ✅ Create Order
+        
         order = Order.objects.create(
             user=request.user,
+            name=name,
+            phone=phone,
             address=address,
             total_price=total
-        )
+            
+            )
 
         # ✅ Save each product in OrderItem
         for id, qty in cart.items():
@@ -194,8 +203,7 @@ def checkout(request):
         # Clear cart
         request.session['cart'] = {}
 
-        return redirect('order_success')
-
+        return redirect('payment', order_id=order.id)
     return render(request, 'checkout.html', {
         'products': products,
         'total': total
@@ -211,4 +219,85 @@ def my_orders(request):
     })
 
 def order_success(request):
-    return render(request, 'order_success.html')
+    order = Order.objects.last()
+    return render(request, 'order_success.html', {'order': order})
+
+@login_required
+def payment(request, order_id):
+    order = Order.objects.get(id=order_id)
+
+    if request.method == 'POST':
+        return redirect('order_success')   # 👈 VERY IMPORTANT
+
+    return render(request, 'payment.html', {'order': order})
+
+from .models import Feedback
+
+@login_required
+def feedback(request, order_id):
+    order = Order.objects.get(id=order_id)
+    items = OrderItem.objects.filter(order=order)
+
+    if request.method == 'POST':
+        for item in items:
+            message = request.POST.get(f'message_{item.product.id}')
+            rating = request.POST.get(f'rating_{item.product.id}')
+
+            if message and rating:
+                Feedback.objects.create(
+                    user=request.user,
+                    order=order,
+                    product=item.product,
+                    message=message,
+                    rating=rating
+                )
+
+        return redirect('feedback_success')
+
+    return render(request, 'feedback.html', {
+        'order': order,
+        'items': items
+    })
+def feedback_success(request):
+    return render(request, 'feedback_success.html')
+
+from .models import Feedback
+
+def product_detail(request, id):
+    product = get_object_or_404(Product, id=id)
+    feedbacks = Feedback.objects.filter(product=product).order_by('-created_at')
+
+    return render(request, 'product_detail.html', {
+        'product': product,
+        'feedbacks': feedbacks
+    })
+
+@login_required
+def add_to_wishlist(request, id):
+    product = Product.objects.get(id=id)
+
+    Wishlist.objects.get_or_create(
+        user=request.user,
+        product=product
+    )
+
+    return redirect('wishlist')
+
+@login_required
+def wishlist_view(request):
+    items = Wishlist.objects.filter(user=request.user)
+
+    return render(request, 'wishlist.html', {
+        'items': items
+    })
+
+@login_required
+def remove_from_wishlist(request, id):
+    product = Product.objects.get(id=id)
+
+    Wishlist.objects.filter(
+        user=request.user,
+        product=product
+    ).delete()
+
+    return redirect('wishlist')

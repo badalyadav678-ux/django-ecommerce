@@ -16,6 +16,18 @@
             Continue Shopping
         </button>
     </a>
+    <script>
+    setTimeout(function(){
+        window.location.href = "/";
+    }, 3000);
+    
+    </script>
+
+    <h2>Order Placed Successfully 🎉</h2>
+    
+    <a href="{% url 'feedback' order.id %}">
+        Give Feedback
+    </a>
 
 </div>
 

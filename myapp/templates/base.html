@@ -63,6 +63,11 @@
         <a href="/" style="color:white; font-size:22px; font-weight:bold;">
             MyStore
         </a>
+
+        <a href="{% url 'wishlist' %}"
+           style="margin-left:20px; color:white; text-decoration:none; font-weight:bold;">
+            ❤️ Wishlist ({{ wishlist_count|default:0 }})
+        </a>
     </div>
 
     <!-- CENTER (SEARCH) -->

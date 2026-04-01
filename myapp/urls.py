@@ -17,5 +17,13 @@ urlpatterns = [
     path('logout/', views.user_logout, name='logout'),
     path('checkout/', views.checkout, name='checkout'),
     path('my-orders/', views.my_orders, name='my_orders'),
+
+    path('payment/<int:order_id>/', views.payment, name='payment'),
+    
     path('order-success/', views.order_success, name='order_success'),
+    path('feedback/<int:order_id>/', views.feedback, name='feedback'),
+    path('feedback-success/', views.feedback_success, name='feedback_success'),
+    path('wishlist/', views.wishlist_view, name='wishlist'),
+    path('add-to-wishlist/<int:id>/', views.add_to_wishlist, name='add_to_wishlist'),
+    path('remove-from-wishlist/<int:id>/', views.remove_from_wishlist, name='remove_from_wishlist'),
 ]

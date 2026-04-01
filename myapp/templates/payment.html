@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Payment Page</h2>
+
+<h3>Total Amount: ₹ {{ order.total_price }}</h3>
+
+<form method="POST">
+    {% csrf_token %}
+    
+    <button type="submit" style="background:green; color:white; padding:10px 20px;">
+        Pay Now
+    </button>
+</form>
+
+{% endblock %}
